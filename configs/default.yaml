@@ -1,0 +1,51 @@
+# 与开题报告 3.4 的开发环境、3.3 的模块划分对应
+data:
+  manifest: data/dummy/manifest.csv
+  image_size: 224
+  frames_per_video: 8
+  use_face_crop: true
+  face_margin: 0.3
+  num_workers: 2
+  jpeg_quality: [30, 95]
+  blur_prob: 0.2
+  brightness_delta: 0.15
+  flip_prob: 0.5
+
+model:
+  backbone: efficientnet_b0   # 可换 mobilenetv3_small_100 / resnet18 等轻量骨干
+  pretrained: false           # 联网后可置 true 使用 timm 预训练权重
+  dropout: 0.2
+  temporal: mean              # mean | attn
+  audio_enabled: true         # 音频检测模块（ASVspoof 2019 训练的轻量 CNN）
+  audio_ckpt: runs/audio/best.pt   # 权重不存在时自动降级为视觉单模态
+  audio_feature: logmel      # logmel 优于 lfcc（见 README 消融）
+  audio_n_mels: 64
+  audio_n_ceps: 20
+  audio_n_filters: 40
+  audio_window_s: 4.0        # 4 s 窗显著优于 1.5 s（eval EER 7.80% vs 12.03%）
+  audio_hop_s: 2.0
+  audio_threshold: 0.5
+  fusion_weights:
+    visual: 0.8
+    audio: 0.2
+  geo_signals:
+    provenance: 0.5
+    duplication: 0.5
+
+train:
+  epochs: 3
+  batch_size: 16
+  lr: 0.0001
+  weight_decay: 0.0001
+  amp: true
+  seed: 42
+  out_dir: runs/exp1
+
+infer:
+  ckpt: runs/wild_full/best.pt   # WildDeepfake 全量训练的真实视觉模型
+  device: cuda
+  threshold: 0.5
+
+api:
+  host: 0.0.0.0
+  port: 8000

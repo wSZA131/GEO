@@ -1,0 +1,20 @@
+# Python 3.10（开题报告 3.4 推荐版本）
+# GPU 环境建议先装 CUDA 版 PyTorch:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+torch>=2.0
+torchvision>=0.15
+timm>=0.9
+opencv-python-headless>=4.8
+numpy>=1.24
+scikit-learn>=1.3
+pyyaml>=6.0
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+soundfile>=0.12          # 音频解码（ASVspoof 为 flac）
+
+# 可选
+# thop>=0.1.1            # benchmark 统计 FLOPs
+# facenet-pytorch>=2.5   # MTCNN 人脸检测（替代 Haar）
+# onnx onnxruntime       # 3.2 中的 ONNX 导出与加速推理
+# kagglehub              # 下载 ASVspoof 2019（也可手动下载）
